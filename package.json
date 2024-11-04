@@ -1,0 +1,32 @@
+{
+  "name": "semantic-release-poetry-plugin",
+  "version": "1.0.0",
+  "description": "Semantic Release plugin for Python Poetry projects",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/covage/semantic-release-poetry-plugin.git"
+  },
+  "keywords": [
+    "semantic-release",
+    "semantic-release-plugin",
+    "poetry",
+    "python"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@semantic-release/error": "^3.0.0",
+    "toml": "^3.0.0"
+  },
+  "peerDependencies": {
+    "semantic-release": ">=18.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "semantic-release": "^21.0.0"
+  },
+  "engines": {
+    "node": ">=14.17"
+  }
+} 

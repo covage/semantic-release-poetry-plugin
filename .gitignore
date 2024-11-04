@@ -128,3 +128,12 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Node modules
+node_modules/
+
+# Coverage directory
+coverage/
+
+# DS_Store files
+.DS_Store
