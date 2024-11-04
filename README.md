@@ -1,2 +1,7 @@
-# semantic-release-poetry-plugin
-The semantic-release-poetry-plugin automates version updates in Poetry projects by accurately syncing the tool.poetry.version field in pyproject.toml with semantic-release, ensuring consistent and error-free version management.
+# `semantic-release-poetry-plugin`
+
+The `semantic-release-poetry-plugin` is a plugin for the `semantic-release` framework that automates version management for Python projects using Poetry. It specifically targets the `tool.poetry.version` field in the `pyproject.toml` file, ensuring that each new release version tag is synchronized with the version specified in this configuration file. This approach eliminates the need for custom scripts, providing a more streamlined and reliable versioning process that is consistent across projects.
+
+Unlike simpler version-bumping scripts, `semantic-release-poetry-plugin` parses the `pyproject.toml` file to update the version accurately without mistakenly modifying dependency versions or other fields. This is essential for maintaining the integrity of project dependencies and avoiding version mismatches, especially in CI/CD pipelines where automation is key. The plugin is lightweight, integrates easily with GitLab CI/CD and other platforms, and improves the developer experience by reducing the setup overhead and minimizing configuration duplication across repositories.
+
+This plugin is built with Node.js following the `semantic-release` plugin guidelines, and it is distributed under the MIT license. By using `semantic-release-poetry-plugin`, teams can benefit from automated, accurate versioning that aligns with the release workflow, preventing errors that could disrupt deployments and production environments.
