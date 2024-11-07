@@ -1,0 +1,14 @@
+# EditorConfig is awesome: https://editorconfig.org
+# It allow to define indentation level for this project code 
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+[*.js]
+indent_style = space
+indent_size = 4
+
+[*.json]
+indent_style = space
+indent_size = 4
+

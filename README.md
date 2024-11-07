@@ -1,4 +1,11 @@
-# `semantic-release-poetry-plugin`
+# semantic-release-poetry-plugin
+
+[**semantic-release**](https://github.com/semantic-release/semantic-release) plugin for bumping version of Python [Poetry](https://python-poetry.org/) projects.
+
+| Step               | Description                                                                                                 |
+|--------------------|-------------------------------------------------------------------------------------------------------------|
+| `verifyConditions` | Locate and validate a `pyproject.toml` file with a version field.                                           |
+| `prepare`          | Update the `pyproject.toml` by changing `tool.poetry.version` without affecting the file structure.         | 
 
 The `semantic-release-poetry-plugin` is a plugin for the `semantic-release` framework that automates version management for Python projects using Poetry. It specifically targets the `tool.poetry.version` field in the `pyproject.toml` file, ensuring that each new release version tag is synchronized with the version specified in this configuration file. This approach eliminates the need for custom scripts, providing a more streamlined and reliable versioning process that is consistent across projects.
 
