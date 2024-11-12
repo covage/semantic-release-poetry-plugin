@@ -5,6 +5,26 @@ const { parse: parseToml } = require('smol-toml');
 
 const DEFAULT_PYPROJECT_FILE_NAME = 'pyproject.toml';
 
+async function verifyConditions(_pluginConfig, context) {
+    const { logger } = context;
+    const pyprojectPath = DEFAULT_PYPROJECT_FILE_NAME;
+    try {
+        const content = await fs.readFile(pyprojectPath, 'utf8');
+        const parsed = parseToml(content);
+        if (!parsed.tool || !parsed.tool.poetry || !parsed.tool.poetry.version) {
+            throw new Error(
+                `Expected "tool.poetry.version" field.`
+            );
+        }
+        logger.log(`${pyprojectPath} is ok.`);
+    } catch (error) {
+        throw new SemanticReleaseError(
+            `Error while checking ${pyprojectPath} file: ` + error.message
+        );
+    }
+
+}
+
 async function prepare(pluginConfig, context) {
     const { nextRelease, logger } = context;
 
@@ -21,14 +41,15 @@ async function prepare(pluginConfig, context) {
 
         await fs.writeFile(pyprojectPath, updatedContent);
 
-        logger.log(`Updated pyproject.toml version to ${nextRelease.version}`);
+        logger.log(`Updated ${pyprojectPath} version to ${nextRelease.version}`);
     } catch (error) {
         throw new SemanticReleaseError(
-            "Error while replacing version in pyproject.toml: " + error.message
+            `Error while replacing version in ${pyprojectPath}: ` + error.message
         );
     }
 }
 
 module.exports = {
+    verifyConditions,
     prepare
 };

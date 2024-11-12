@@ -10,6 +10,7 @@ describe('poetry version replace', () => {
         expect(res.split('\n')[1]).toBe(`version = "1.0.0"`)
         expect(res.split('\n').length).toBe(2)
     });
+
     test('replace simple TOML 2', async () => {
         const content = [
             `[tool.poetry]`,
@@ -20,6 +21,7 @@ describe('poetry version replace', () => {
         const res = poetryReplace.replaceTomlToolPoetryVersion(content, "43.2.3")
         expect(res.split('\n')[2]).toBe(`version = "43.2.3"`)
     });
+
     test('replace in full TOML', async () => {
         const content = [
             `[tool.poetry]`,

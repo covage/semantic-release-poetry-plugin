@@ -11,7 +11,7 @@ function replaceTomlToolPoetryVersion(content, newVersion) {
     if (toolPoetryVersionLineStart === -1) {
         throw new Error("Could not find tool.poetry.version key in pyproject.toml");
     }
-    let lineEndRelativePos = content.substring(toolPoetryVersionLineStart).indexOf('\n');
+    const lineEndRelativePos = content.substring(toolPoetryVersionLineStart).indexOf('\n');
     let versionLineEnd = toolPoetryVersionLineStart + lineEndRelativePos;
     if (lineEndRelativePos === -1) {
         versionLineEnd = content.length;
