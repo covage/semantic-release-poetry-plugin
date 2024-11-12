@@ -40,7 +40,7 @@
         "node": ">=14.17"
     },
     "scripts": {
-        "lint": "eslint .",
+        "lint": "eslint src",
         "coverage": "jest --coverage",
         "test": "jest"
     }
