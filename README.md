@@ -1,5 +1,7 @@
 # semantic-release-poetry-plugin
 
+![npm-version](https://img.shields.io/npm/v/@covage/semantic-release-poetry-plugin.svg) ![License](https://img.shields.io/badge/License-MIT-blue)
+
 [**semantic-release**](https://github.com/semantic-release/semantic-release) plugin for bumping version of Python [Poetry](https://python-poetry.org/) projects.
 
 | Step               | Description                                                                                                 |
