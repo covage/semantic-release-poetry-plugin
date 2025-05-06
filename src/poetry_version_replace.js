@@ -1,41 +1,30 @@
 function replaceTomlToolPoetryVersion(content, newVersion) {
-    let newContent = content;
-
-    // Try tool.poetry section first
-    const toolPoetrySectionStart = content.indexOf("[tool.poetry]");
-    if (toolPoetrySectionStart !== -1) {
-        const toolPoetryVersionLineStart = toolPoetrySectionStart + content.substring(toolPoetrySectionStart).indexOf("version = ");
-        if (toolPoetryVersionLineStart !== -1) {
-            const toolPoetryVersionValueStart = toolPoetryVersionLineStart + content.substring(toolPoetryVersionLineStart).indexOf('"');
-            const lineEndRelativePos = content.substring(toolPoetryVersionLineStart).indexOf('\n');
-            let versionLineEnd = toolPoetryVersionLineStart + lineEndRelativePos;
-            if (lineEndRelativePos === -1) {
-                versionLineEnd = content.length;
-            }
-            return content.substring(0, toolPoetryVersionValueStart) + '"' + newVersion + '"' + content.substring(versionLineEnd);
-        }
-    }
-
-    // If not found, try project section (uv)
-    const projectSectionStart = content.indexOf("[project]");
-    if (projectSectionStart !== -1) {
-        const projectVersionLineStart = projectSectionStart + content.substring(projectSectionStart).indexOf("version = ");
-        if (projectVersionLineStart !== -1) {
-            const projectVersionValueStart = projectVersionLineStart + content.substring(projectVersionLineStart).indexOf('"');
-            const lineEndRelativePos = content.substring(projectVersionLineStart).indexOf('\n');
-            let versionLineEnd = projectVersionLineStart + lineEndRelativePos;
-            if (lineEndRelativePos === -1) {
-                versionLineEnd = content.length;
-            }
-            return content.substring(0, projectVersionValueStart) + '"' + newVersion + '"' + content.substring(versionLineEnd);
-        }
-    }
+    const sectionPositions = [
+        content.indexOf("[tool.poetry]"),
+        content.indexOf("[project]")
+    ]
 
     // If neither section found or no version in either section
-    if (toolPoetrySectionStart === -1 && projectSectionStart === -1) {
+    if (sectionPositions.every(p => p === -1)) {
         throw new Error("Could not find [tool.poetry] or [project] section in pyproject.toml");
     }
-    throw new Error("Could not find version key in pyproject.toml");
+
+    const sectionStart = sectionPositions.find(p => p !== -1)
+
+    const versionLineStart = sectionStart + content.substring(sectionStart).indexOf("version = ");
+    if (versionLineStart === -1) {
+        throw new Error("Could not find version key in pyproject.toml");
+    }
+
+    const versionValueStart = versionLineStart + content.substring(versionLineStart).indexOf('"');
+    const lineEndRelativePos = content.substring(versionLineStart).indexOf('\n');
+    let versionLineEnd = versionLineStart + lineEndRelativePos;
+    // handle the case where the `version = x.x` line is the last line without a final newline
+    if (lineEndRelativePos === -1) {
+        versionLineEnd = content.length;
+    }
+    const newContent = content.substring(0, versionValueStart) + '"' + newVersion + '"' + content.substring(versionLineEnd);
+    return newContent;
 }
 
 module.exports = {
