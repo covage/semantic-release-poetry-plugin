@@ -47,3 +47,8 @@ branches:
 
 The idea behind this plugin is to prevent the use of custom version bumping script when using semantic-release.
 
+## Roadmap
+
+- [x] basic support for Poetry convention
+- [x] basic support for PEP 621 convention
+- [ ] verify that the TOML syntax is still correct
