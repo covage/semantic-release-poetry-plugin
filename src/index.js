@@ -11,9 +11,12 @@ async function verifyConditions(_pluginConfig, context) {
     try {
         const content = await fs.readFile(pyprojectPath, 'utf8');
         const parsed = parseToml(content);
-        if (!parsed.tool || !parsed.tool.poetry || !parsed.tool.poetry.version) {
+        if (
+            (!parsed.project || !parsed.project.version) &&
+            (!parsed.tool || !parsed.tool.poetry || !parsed.tool.poetry.version)
+        ) {
             throw new Error(
-                `Expected "tool.poetry.version" field.`
+                `Did not find expected "project.version" or "tool.poetry.version" field in the pyproject.toml.`
             );
         }
         logger.log(`${pyprojectPath} is ok.`);
