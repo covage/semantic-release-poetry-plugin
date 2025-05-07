@@ -1,23 +1,29 @@
 function replaceTomlToolPoetryVersion(content, newVersion) {
-    let newContent = content;
+    const sectionPositions = [
+        content.indexOf("[tool.poetry]"),
+        content.indexOf("[project]")
+    ]
 
-    // find the first occurence of version after tool.poetry
-    const toolPoetrySectionStart = content.indexOf("[tool.poetry]");
-    if (toolPoetrySectionStart === -1) {
-        throw new Error("Could not find [tool.poetry] section in pyproject.toml");
+    // If neither section found or no version in either section
+    if (sectionPositions.every(p => p === -1)) {
+        throw new Error("Could not find [tool.poetry] or [project] section in pyproject.toml");
     }
-    const toolPoetryVersionLineStart = toolPoetrySectionStart + content.substring(toolPoetrySectionStart).indexOf("version = ");
-    const toolPoetryVersionValueStart = toolPoetryVersionLineStart + content.substring(toolPoetryVersionLineStart).indexOf('"');
-    if (toolPoetryVersionLineStart === -1) {
-        throw new Error("Could not find tool.poetry.version key in pyproject.toml");
+
+    const sectionStart = sectionPositions.find(p => p !== -1)
+
+    const versionLineStart = sectionStart + content.substring(sectionStart).indexOf("version = ");
+    if (versionLineStart === -1) {
+        throw new Error("Could not find version key in pyproject.toml");
     }
-    const lineEndRelativePos = content.substring(toolPoetryVersionLineStart).indexOf('\n');
-    let versionLineEnd = toolPoetryVersionLineStart + lineEndRelativePos;
+
+    const versionValueStart = versionLineStart + content.substring(versionLineStart).indexOf('"');
+    const lineEndRelativePos = content.substring(versionLineStart).indexOf('\n');
+    let versionLineEnd = versionLineStart + lineEndRelativePos;
+    // handle the case where the `version = x.x` line is the last line without a final newline
     if (lineEndRelativePos === -1) {
         versionLineEnd = content.length;
     }
-    newContent = content.substring(0, toolPoetryVersionValueStart) + '"' + newVersion + '"' + content.substring(versionLineEnd);
-
+    const newContent = content.substring(0, versionValueStart) + '"' + newVersion + '"' + content.substring(versionLineEnd);
     return newContent;
 }
 

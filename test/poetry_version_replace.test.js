@@ -1,7 +1,7 @@
 const poetryReplace = require('../src/poetry_version_replace');
 
 describe('poetry version replace', () => {
-    test('replace simple TOML 1', async () => {
+    test('replace simple Poetry TOML, version line is the last', async () => {
         const content = [
             `[tool.poetry]`,
             `version = "0.1.0"`,
@@ -11,7 +11,7 @@ describe('poetry version replace', () => {
         expect(res.split('\n').length).toBe(2)
     });
 
-    test('replace simple TOML 2', async () => {
+    test('replace simple Poetry TOML, version line is in the middle', async () => {
         const content = [
             `[tool.poetry]`,
             `name = "my_lib"`,
@@ -22,7 +22,7 @@ describe('poetry version replace', () => {
         expect(res.split('\n')[2]).toBe(`version = "43.2.3"`)
     });
 
-    test('replace in full TOML', async () => {
+    test('replace in full Poetry TOML', async () => {
         const content = [
             `[tool.poetry]`,
             `name = "my_lib"`,
@@ -52,7 +52,7 @@ describe('poetry version replace', () => {
         expect(res.split('\n')[2]).toBe(`version = "43.9.9"`)
     });
 
-    test('replace with absent tool.poetry section', async () => {
+    test('replace with no tool.poetry section', async () => {
         const content = [
             `name = "my_lib"`,
             `description = "Lib to do thing"`
@@ -60,7 +60,7 @@ describe('poetry version replace', () => {
 
         expect(
             () => poetryReplace.replaceTomlToolPoetryVersion(content, "43.2.3")
-        ).toThrow(Error("Could not find [tool.poetry] section in pyproject.toml"))
+        ).toThrow(Error("Could not find [tool.poetry] or [project] section in pyproject.toml"))
     });
 
     test('replace with absent tool.poetry.version field', async () => {
@@ -72,7 +72,22 @@ describe('poetry version replace', () => {
 
         expect(
             () => poetryReplace.replaceTomlToolPoetryVersion(content, "43.2.3")
-        ).toThrow(Error("Could not find tool.poetry.version key in pyproject.toml"))
+        ).toThrow(Error("Could not find version key in pyproject.toml"))
+    });
+
+    test('replace in full UV TOML', async () => {
+        const content = [
+            `[project]`,
+            `name = "my_lib"`,
+            `version = "42.1.1"`,
+            `description = "Lib to do thing"`,
+            `authors = ["John Doe <john@example.org"]`,
+            `keywords = []`,
+            `license = "MIT"`,
+            `readme = "README.md"`,
+        ].join('\n')
+        const res = poetryReplace.replaceTomlToolPoetryVersion(content, "43.0.0")
+        expect(res.split('\n')[2]).toBe(`version = "43.0.0"`)
     });
 }); 
 
